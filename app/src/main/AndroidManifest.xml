@@ -45,6 +45,10 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps">
         </activity>
+        <activity
+            android:name=".LobbyActivity"
+            android:label="@string/lobby_activity">
+        </activity>
     </application>
 
 </manifest>

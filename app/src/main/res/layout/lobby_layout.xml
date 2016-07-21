@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time Limit in Minutes"
+        />
+
+    <EditText
+        android:id="@+id/remaining_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2"
+        android:inputType="number"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="# Users"/>
+
+    <TextView
+        android:id="@+id/number_of_users"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10/10"/>
+
+    <Button
+        android:id="@+id/start_game_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="START GAME"/>
+
+</LinearLayout>

@@ -28,7 +28,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.create_game:
-                Toast.makeText(this, "CREATE GAME", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, LobbyActivity.class));
                 break;
             case R.id.join_game:
                 startActivity(new Intent(this, JoinGameActivity.class));
