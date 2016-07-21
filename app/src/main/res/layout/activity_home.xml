@@ -3,25 +3,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:background="@drawable/home_bg">
 
     <Button
         android:id="@+id/create_game"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:text="CREATE GAME"
-        android:textColor="@android:color/white"
-        android:background="@null"/>
+        android:singleLine="true"
+        android:layout_above="@+id/join_game"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        style="@style/z_button"
+        android:textSize="32dp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/join_game"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/create_game"
         android:text="JOIN GAME"
-        android:textColor="@android:color/white"
-        android:background="@null"/>
+        android:layout_marginBottom="46dp"
+        style="@style/z_button_secondary"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
