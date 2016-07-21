@@ -38,6 +38,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".JoinGameActivity"
+            android:label="Join Game">
+        </activity>
+        <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps">
         </activity>

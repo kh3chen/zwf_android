@@ -1,6 +1,7 @@
 package com.zynga.zombieswf_android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +31,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 Toast.makeText(this, "CREATE GAME", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.join_game:
-                Toast.makeText(this, "JOIN GAME", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, JoinGameActivity.class));
                 break;
         }
     }
