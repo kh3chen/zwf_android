@@ -36,6 +36,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
         ZombieApplication app = (ZombieApplication) getApplication();
         mSocket = app.getSocket();
+        mSocket.connect();
         mSocket.on("gameEmit", onGameEmit);
     }
 
