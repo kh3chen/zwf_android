@@ -161,10 +161,11 @@
     <orderEntry type="library" exported="" name="play-services-drive-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-vector-drawable-23.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-base-9.0.1" level="project" />
-    <orderEntry type="library" exported="" name="firebase-crash-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-ads-lite-9.0.1" level="project" />
+    <orderEntry type="library" exported="" name="firebase-crash-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-wallet-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-auth-base-9.0.1" level="project" />
+    <orderEntry type="library" exported="" name="okhttp-ws-3.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-location-9.0.1" level="project" />
@@ -172,6 +173,7 @@
     <orderEntry type="library" exported="" name="play-services-wearable-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-auth-module-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-common-9.0.1" level="project" />
+    <orderEntry type="library" exported="" name="engine.io-client-0.7.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-auth-common-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-analytics-9.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
@@ -182,15 +184,18 @@
     <orderEntry type="library" exported="" name="play-services-games-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-storage-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-iid-9.0.1" level="project" />
-    <orderEntry type="library" exported="" name="play-services-appinvite-9.0.1" level="project" />
+    <orderEntry type="library" exported="" name="socket.io-client-0.7.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-panorama-9.0.1" level="project" />
-    <orderEntry type="library" exported="" name="appcompat-v7-23.4.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-appinvite-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-tagmanager-api-9.0.1" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-23.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-nearby-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-auth-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-storage-common-9.0.1" level="project" />
+    <orderEntry type="library" exported="" name="okio-1.6.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-messaging-9.0.1" level="project" />
+    <orderEntry type="library" exported="" name="okhttp-3.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-gcm-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-tasks-9.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-database-connection-9.0.1" level="project" />
