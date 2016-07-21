@@ -60,7 +60,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         public void call(Object... args) {
             JSONObject data = (JSONObject) args[0];
 
-            Toast.makeText(this, data.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(HomeActivity.this, data.toString(), Toast.LENGTH_SHORT).show();
         }
     };
 }
