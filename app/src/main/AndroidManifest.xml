@@ -12,6 +12,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".socketio.ZombieApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -44,6 +45,10 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps">
+        </activity>
+        <activity
+            android:name=".LobbyActivity"
+            android:label="@string/lobby_activity">
         </activity>
     </application>
 

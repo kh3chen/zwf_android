@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.zynga.zombieswf_android.socketio.ChatApplication;
+import com.zynga.zombieswf_android.socketio.ZombieApplication;
 
 import org.json.JSONObject;
 
@@ -34,7 +34,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         createGameButton.setOnClickListener(this);
         joinGameButton.setOnClickListener(this);
 
-        ChatApplication app = (ChatApplication) getApplication();
+        ZombieApplication app = (ZombieApplication) getApplication();
         mSocket = app.getSocket();
         mSocket.on("gameEmit", onGameEmit);
     }
@@ -44,6 +44,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.create_game:
                 onCreateGameClicked();
+                startActivity(new Intent(this, LobbyActivity.class));
                 break;
             case R.id.join_game:
                 startActivity(new Intent(this, JoinGameActivity.class));
