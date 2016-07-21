@@ -14,7 +14,7 @@ import android.widget.TextView;
  */
 public class LobbyActivity extends Activity {
     // Game will always be from the creator
-    private static final String KEY_GAME_TIME = "keyGameTime";
+    public static final String KEY_GAME_TIME = "keyGameTime";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
