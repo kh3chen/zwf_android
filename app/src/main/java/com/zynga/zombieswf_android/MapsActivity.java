@@ -101,11 +101,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
 
+        mMap.setMyLocationEnabled(true);
+
         LatLng me = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
 
         // Add a marker at location and move the camera
         mMap.addMarker(new MarkerOptions().position(me).title("You"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-151, 25)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(me));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f));
     }
 
     @Override
