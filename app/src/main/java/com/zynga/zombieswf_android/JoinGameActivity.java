@@ -35,6 +35,8 @@ public class JoinGameActivity extends Activity implements View.OnClickListener {
 
     private int mGameTime;
 
+    private boolean mIsZombie;
+
     private List<String> playerIdList = new ArrayList<>();
 
     @Override
@@ -88,6 +90,7 @@ public class JoinGameActivity extends Activity implements View.OnClickListener {
                 if (Boolean.parseBoolean(joinSuccessful)) {
                     mGameTime = jsonObject.optInt("game_time");
                     playerIdList.add(jsonObject.optString("id"));
+                    mIsZombie = jsonObject.optBoolean("zombie");
                     /*
                     runOnUiThread(new Runnable() {
                         @Override
@@ -99,6 +102,7 @@ public class JoinGameActivity extends Activity implements View.OnClickListener {
                     // go to create game screen with things disabled
                     Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
                     intent.putExtra(LobbyActivity.KEY_IS_CREATOR, false);
+                    intent.putExtra(LobbyActivity.KEY_IS_ZOMBIE, mIsZombie);
                     // Add map time
                     // Intent intent = new Intent(JoinGameActivity.this, MapsActivity.class);
                     intent.putExtra(LobbyActivity.KEY_GAME_TIME, String.valueOf(mGameTime));

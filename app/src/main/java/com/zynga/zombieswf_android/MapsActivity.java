@@ -68,6 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private String mRequestId;
     private List<Marker> mMarkerList;
+    private boolean mIsZombie;
 
     private Socket mSocket;
     private static final String TAG = "stickynotes";
@@ -96,12 +97,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
-            minutesString = null;
+            minutesString = "2";
+            mIsZombie = false;
         } else {
             minutesString = extras.getString(LobbyActivity.KEY_GAME_TIME);
+            mIsZombie = extras.getBoolean(LobbyActivity.KEY_IS_ZOMBIE);
         }
 
-        int timerMinutes = Integer.parseInt(minutesString);
+        int timerMinutes = Integer.parseInt("60");//minutesString);
 
         new CountDownTimer(1000 * 60 * timerMinutes, 1000) { // Time in milis, countdown interval (1 second)
 
@@ -183,6 +186,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
+
+        if (mIsZombie) {
+            findViewById(R.id.blood).setVisibility(View.VISIBLE);
+        }
 
         playerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -378,18 +385,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void setNoteBody(String body) {
-        // TODO: do things here
-        toast("YOU'RE A ZOMBIE NOW!! Text: " + body);
+        if (!mIsZombie && TextUtils.equals(body, "Zombie")) {
+            findViewById(R.id.blood).setVisibility(View.VISIBLE);
+        }
     }
 
     private NdefMessage getNoteAsNdef() {
         // TODO: Make this different string, based on human or zombie?
-        byte[] textBytes = "Zombie".toString().getBytes();
-        NdefRecord textRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, "text/plain".getBytes(),
-                new byte[] {}, textBytes);
-        return new NdefMessage(new NdefRecord[] {
-                textRecord
-        });
+        if (mIsZombie) {
+            byte[] textBytes = "Zombie".toString().getBytes();
+            NdefRecord textRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, "text/plain".getBytes(),
+                    new byte[]{}, textBytes);
+            return new NdefMessage(new NdefRecord[]{
+                    textRecord
+            });
+        }
+        else {
+            byte[] textBytes = "Human".toString().getBytes();
+            NdefRecord textRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, "text/plain".getBytes(),
+                    new byte[]{}, textBytes);
+            return new NdefMessage(new NdefRecord[]{
+                    textRecord
+            });
+        }
     }
 
     private void enableNdefExchangeMode() {

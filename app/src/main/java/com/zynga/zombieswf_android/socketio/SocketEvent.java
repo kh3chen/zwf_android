@@ -25,7 +25,7 @@ public class SocketEvent {
         return stringBuilder.toString();
     }
 
-    public static String makeJoinResultObject(boolean isSuccessful, String androidId, int gameTime) {
+    public static String makeJoinResultObject(boolean isSuccessful, String androidId, int gameTime, boolean isZombie) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{join_successful:\"");
         stringBuilder.append(String.valueOf(isSuccessful));
@@ -33,6 +33,8 @@ public class SocketEvent {
         stringBuilder.append(String.valueOf(gameTime));
         stringBuilder.append("\",id:\"");
         stringBuilder.append(androidId);
+        stringBuilder.append("\",zombie:\"");
+        stringBuilder.append(String.valueOf(isZombie));
         stringBuilder.append("\"}");
         return stringBuilder.toString();
     }

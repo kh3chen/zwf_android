@@ -35,11 +35,15 @@ public class LobbyActivity extends Activity {
     public static final String KEY_PLAYER_LIST = "keyPlayerList";
     public static final String KEY_GAME_TIME = "keyGameTime";
     public static final String KEY_IS_CREATOR = "keyIsCreator";
+    public static final String KEY_IS_ZOMBIE = "keyIsZombie";
 
     private Socket mSocket;
     private String mGameCode = "1q2w3e";
+    private boolean mIsZombie;
 
     private List<String> playerIdList = new ArrayList<>();
+
+    private int mNumZombies = 0;
 
     private EditText mTimeEditText;
     private Button mStartGameButton;
@@ -64,10 +68,12 @@ public class LobbyActivity extends Activity {
         mStartGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                mIsZombie = true;
                 mSocket.emit(SocketConstants.EMIT, SocketEvent.startGame());
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                 intent.putExtra(LobbyActivity.KEY_PLAYER_LIST, TextUtils.join(",", playerIdList));
-                intent.putExtra(KEY_GAME_TIME, String.valueOf(mTimeEditText.getText()));
+                intent.putExtra(KEY_GAME_TIME, mTimeEditText.getText().toString());
+                intent.putExtra(KEY_IS_ZOMBIE, mIsZombie);
                 startActivity(intent);
             }
         });
@@ -94,9 +100,11 @@ public class LobbyActivity extends Activity {
         if (extras == null) {
             mIsCreator = false;
             mGameTime = "2";
+            mIsZombie = false;
         } else {
             mIsCreator = extras.getBoolean(LobbyActivity.KEY_IS_CREATOR);
             mGameTime = extras.getString(LobbyActivity.KEY_GAME_TIME);
+            mIsZombie = extras.getBoolean(LobbyActivity.KEY_IS_ZOMBIE);
         }
         if (!mIsCreator) {
             styleForNonCreator();
@@ -147,7 +155,8 @@ public class LobbyActivity extends Activity {
                 } else {
                     isValidGameCode = false;
                 }
-                mSocket.emit(SocketConstants.EMIT, SocketEvent.makeJoinResultObject(isValidGameCode, mAndroidId, Integer.parseInt(mTimeEditText.getText().toString())));
+                boolean isZombie = mNumZombies == 0 || mNumZombies < playerIdList.size() * 0.2;
+                mSocket.emit(SocketConstants.EMIT, SocketEvent.makeJoinResultObject(isValidGameCode, mAndroidId, Integer.parseInt(mTimeEditText.getText().toString()), isZombie));
             }
 
             // listen for game start
@@ -156,6 +165,7 @@ public class LobbyActivity extends Activity {
                 Intent intent = new Intent(LobbyActivity.this, MapsActivity.class);
                 intent.putExtra(LobbyActivity.KEY_PLAYER_LIST, TextUtils.join(",", playerIdList));
                 intent.putExtra(LobbyActivity.KEY_GAME_TIME, mGameTime);
+                intent.putExtra(LobbyActivity.KEY_IS_ZOMBIE, mIsZombie);
                 startActivity(intent);
             }
         }
