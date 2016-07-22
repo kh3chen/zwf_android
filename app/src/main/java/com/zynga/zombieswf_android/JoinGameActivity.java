@@ -3,6 +3,7 @@ package com.zynga.zombieswf_android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,9 @@ import com.zynga.zombieswf_android.socketio.ZombieApplication;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
@@ -25,6 +29,12 @@ public class JoinGameActivity extends Activity implements View.OnClickListener {
 
     private Socket mSocket;
 
+    private String mAndroidId;
+
+    private int mGameTime;
+
+    private List<String> playerIdList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +42,9 @@ public class JoinGameActivity extends Activity implements View.OnClickListener {
 
         Button confirmButton = (Button) findViewById(R.id.confirm);
         confirmButton.setOnClickListener(this);
+
+        mAndroidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        playerIdList.add(mAndroidId);
 
         ZombieApplication app = (ZombieApplication) getApplication();
         mSocket = app.getSocket();
@@ -45,7 +58,7 @@ public class JoinGameActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.confirm:
-                mSocket.emit(SocketConstants.EMIT, SocketEvent.makeJoinObject("1q2w3e"));
+                mSocket.emit(SocketConstants.EMIT, SocketEvent.makeJoinObject(mAndroidId, "1q2w3e"));
                 break;
         }
     }
@@ -69,13 +82,30 @@ public class JoinGameActivity extends Activity implements View.OnClickListener {
             final String joinSuccessful = jsonObject.optString("join_successful");
             if (!TextUtils.isEmpty(joinSuccessful)) {
                 if (Boolean.parseBoolean(joinSuccessful)) {
-                    int gameTime = jsonObject.optInt("game_time");
-                    Intent intent = new Intent(JoinGameActivity.this, MapsActivity.class);
-                    intent.putExtra(LobbyActivity.KEY_GAME_TIME, String.valueOf(gameTime));
-                    startActivity(intent);
+                    mGameTime = jsonObject.optInt("game_time");
+                    playerIdList.add(jsonObject.optString("id"));
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(JoinGameActivity.this, "Successfully joined! Waiting for game to start...", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
-                    Toast.makeText(JoinGameActivity.this, "Unable to join.", Toast.LENGTH_SHORT).show();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(JoinGameActivity.this, "Unable to join.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
+            }
+
+            final String startGame = jsonObject.optString("start_game");
+            if (!TextUtils.isEmpty(startGame)) {
+                Intent intent = new Intent(JoinGameActivity.this, MapsActivity.class);
+                intent.putExtra(LobbyActivity.KEY_PLAYER_LIST, TextUtils.join(",", playerIdList));
+                intent.putExtra(LobbyActivity.KEY_GAME_TIME, String.valueOf(mGameTime));
+                startActivity(intent);
             }
         }
     };

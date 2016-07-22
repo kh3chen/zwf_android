@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.zynga.zombieswf_android.socketio.SocketConstants;
-import com.zynga.zombieswf_android.socketio.SocketEvent;
 import com.zynga.zombieswf_android.socketio.ZombieApplication;
 
 import org.json.JSONException;

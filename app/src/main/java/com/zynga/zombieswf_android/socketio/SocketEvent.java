@@ -15,20 +15,24 @@ public class SocketEvent {
         return stringBuilder.toString();
     }
 
-    public static String makeJoinObject(String gameCode) {
+    public static String makeJoinObject(String androidId, String gameCode) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{join:\"");
         stringBuilder.append(gameCode);
+        stringBuilder.append("\",id:\"");
+        stringBuilder.append(androidId);
         stringBuilder.append("\"}");
         return stringBuilder.toString();
     }
 
-    public static String makeJoinResultObject(boolean isSuccessful, int gameTime) {
+    public static String makeJoinResultObject(boolean isSuccessful, String androidId, int gameTime) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{join_successful:\"");
         stringBuilder.append(String.valueOf(isSuccessful));
         stringBuilder.append("\",game_time:\"");
         stringBuilder.append(String.valueOf(gameTime));
+        stringBuilder.append("\",id:\"");
+        stringBuilder.append(androidId);
         stringBuilder.append("\"}");
         return stringBuilder.toString();
     }
@@ -48,5 +52,9 @@ public class SocketEvent {
         stringBuilder.append(requestId);
         stringBuilder.append("}");
         return stringBuilder.toString();
+    }
+
+    public static String startGame() {
+        return "{start_game:\"now\"}";
     }
 }

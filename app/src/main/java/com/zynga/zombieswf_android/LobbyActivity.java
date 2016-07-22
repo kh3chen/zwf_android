@@ -30,6 +30,7 @@ import io.socket.emitter.Emitter;
  */
 public class LobbyActivity extends Activity {
     // Game will always be from the creator
+    public static final String KEY_PLAYER_LIST = "keyPlayerList";
     public static final String KEY_GAME_TIME = "keyGameTime";
 
     private Socket mSocket;
@@ -38,6 +39,10 @@ public class LobbyActivity extends Activity {
     private List<String> playerIdList = new ArrayList<>();
 
     private EditText mTimeEditText;
+
+    private String mAndroidId;
+
+    TextView numberOfUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +58,19 @@ public class LobbyActivity extends Activity {
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mSocket.emit(SocketConstants.EMIT, SocketEvent.startGame());
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra(LobbyActivity.KEY_PLAYER_LIST, TextUtils.join(",", playerIdList));
                 intent.putExtra(KEY_GAME_TIME, String.valueOf(mTimeEditText.getText()));
                 startActivity(intent);
             }
         });
 
-        TextView numberOfUsers = (TextView) findViewById(R.id.number_of_users);
-        // TODO: get and set number of users based on socket
+        mAndroidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        playerIdList.add(mAndroidId);
 
-        String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        playerIdList.add(androidId);
+        //numberOfUsers = (TextView) findViewById(R.id.number_of_users);
+        //numberOfUsers.setText(playerIdList.size());
 
         ZombieApplication app = (ZombieApplication) getApplication();
         mSocket = app.getSocket();
@@ -102,12 +109,15 @@ public class LobbyActivity extends Activity {
             final String gameCode = jsonObject.optString("join");
             if (!TextUtils.isEmpty(gameCode)) {
                 boolean isValidGameCode;
-                if (mGameCode.equals(gameCode)) {
+                String otherPlayerId = jsonObject.optString("id");
+                if (mGameCode.equals(gameCode) && !TextUtils.isEmpty(otherPlayerId)) {
                     isValidGameCode = true;
+                    playerIdList.add(otherPlayerId);
+                    //numberOfUsers.setText(playerIdList.size());
                 } else {
                     isValidGameCode = false;
                 }
-                mSocket.emit(SocketConstants.EMIT, SocketEvent.makeJoinResultObject(isValidGameCode, Integer.parseInt(mTimeEditText.getText().toString())));
+                mSocket.emit(SocketConstants.EMIT, SocketEvent.makeJoinResultObject(isValidGameCode, mAndroidId, Integer.parseInt(mTimeEditText.getText().toString())));
             }
         }
     };
