@@ -31,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     final int MY_ACCESS_FINE_LOCATION = 1;
+    // default to 2 minutes
+    private final int PING_COOLDOWN_TIME_MILLIS = 2 * 1000 * 60;
 
     private GoogleMap mMap;
 
@@ -39,6 +41,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLocation;
 
     private TextView mCountDownTimer;
+
+    private Button mPingButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         new CountDownTimer(1000 * 60 * timerMinutes, 1000) { // Time in milis, countdown interval (1 second)
 
             public void onTick(long millisUntilFinished) {
-                // Format it here
-                String formattedString = String.format("%02d:%02d:%02d",
-                        TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
-                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) -
-                                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
-                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
-                mCountDownTimer.setText("Time Remaining: " + formattedString);
+                mCountDownTimer.setText("Time Remaining: " + formatCountDownTimeString(millisUntilFinished));
             }
 
             public void onFinish() {
@@ -119,13 +116,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }.start();
 
         // Buttons
-        Button pingButton = (Button) findViewById(R.id.ping_button);
+        mPingButton = (Button) findViewById(R.id.ping_button);
         Button playerButton = (Button) findViewById(R.id.players_button);
 
-        pingButton.setOnClickListener(new View.OnClickListener() {
+        mPingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO: call server for all gps locations
+
+                // set timer cooldown to 2 minutes
+                mPingButton.setEnabled(false);
+
+                new CountDownTimer(PING_COOLDOWN_TIME_MILLIS, 1000) { // Time in milis, countdown interval (1 second)
+
+                    public void onTick(long millisUntilFinished) {
+                        mPingButton.setText("Available in: " + formatCountDownTimeString(millisUntilFinished));
+                    }
+
+                    public void onFinish() {
+                        mPingButton.setEnabled(true);
+                    }
+
+                }.start();
+
             }
         });
 
@@ -136,6 +149,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+    }
+
+    private String formatCountDownTimeString(long millisUntilFinished) {
+        return String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+                TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
     }
 
     private void goToGameScoreScreen() {
