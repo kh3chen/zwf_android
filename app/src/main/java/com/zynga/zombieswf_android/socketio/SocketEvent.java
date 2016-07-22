@@ -37,13 +37,16 @@ public class SocketEvent {
         return "{ping:\"now\"}";
     }
 
-    public static String makeLocationObject(Location location) {
+    public static String makeLocationObject(Location location, String requestId) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{location:{lat:");
         stringBuilder.append(String.valueOf(location.getLatitude()));
         stringBuilder.append(",long:");
         stringBuilder.append(String.valueOf(location.getLongitude()));
-        stringBuilder.append("}}");
+        stringBuilder.append("}");
+        stringBuilder.append(",id:");
+        stringBuilder.append(requestId);
+        stringBuilder.append("}");
         return stringBuilder.toString();
     }
 }

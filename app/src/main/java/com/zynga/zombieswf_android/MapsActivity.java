@@ -47,6 +47,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import io.socket.client.Socket;
@@ -55,7 +57,7 @@ import io.socket.emitter.Emitter;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     // default to 2 minutes
-    private final int PING_COOLDOWN_TIME_MILLIS = 2 * 1000 * 60;
+    private final int PING_COOLDOWN_TIME_MILLIS = 0;//2 * 1000 * 60;
     final int MY_ACCESS_FINE_LOCATION = 1;
 
     private GoogleMap mMap;
@@ -63,6 +65,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLocation;
     private TextView mCountDownTimer;
     private Button mPingButton;
+
+    private String mRequestId;
+    private List<Marker> mMarkerList;
 
     private Socket mSocket;
     private static final String TAG = "stickynotes";
@@ -159,7 +164,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mPingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSocket.emit(SocketConstants.EMIT, SocketEvent.makePing());
+                ping();
 
                 // set timer cooldown to 2 minutes
                 mPingButton.setEnabled(false);
@@ -211,6 +216,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Intent filters for writing to a tag
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         mWriteTagFilters = new IntentFilter[] { tagDetected };
+
+        mMarkerList = new ArrayList<>();
     }
 
     private String formatCountDownTimeString(long millisUntilFinished) {
@@ -225,6 +232,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void goToGameScoreScreen() {
         Intent intent = new Intent(getApplicationContext(), GameScoreActivity.class); // TODO: make game screen
         startActivity(intent);
+    }
+
+    private void ping() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.clear();
+
+        mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        mSocket.emit(SocketConstants.EMIT, SocketEvent.makePing());
+    }
+
+    private void addMarker(LatLng latLng) {
+        // Add a marker at location and move the camera
+        mMarkerList.add(mMap.addMarker(new MarkerOptions().position(latLng)));
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()));
+        for (Marker marker : mMarkerList) {
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+
+        int padding = 200; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+
+        mMap.animateCamera(cu);
     }
 
     /**
@@ -449,34 +484,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_ACCESS_FINE_LOCATION);
             return;
         }
+
+        mMap.setMyLocationEnabled(true);
+
         mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         if (mLocation == null) {
             return;
         }
 
-        mMap.setMyLocationEnabled(true);
-
         LatLng myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f));
-
-        // Add a marker at location and move the camera
-        ArrayList<Marker> markers = new ArrayList<>();
-        markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.latitude + (Math.random() - 0.5) * 0.01, myLocation.longitude + (Math.random() - 0.5) * 0.01))));
-
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(myLocation);
-        for (Marker marker : markers) {
-            builder.include(marker.getPosition());
-        }
-        LatLngBounds bounds = builder.build();
-
-        int padding = 200; // offset from edges of the map in pixels
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-
-        mMap.animateCamera(cu);
     }
 
     @Override
@@ -518,18 +538,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     ActivityCompat.requestPermissions(MapsActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_ACCESS_FINE_LOCATION);
                     return;
                 }
-                mSocket.emit(SocketConstants.EMIT, SocketEvent.makeLocationObject(mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)));
+                mSocket.emit(SocketConstants.EMIT, SocketEvent.makeLocationObject(mLocation, UUID.randomUUID().toString()));
             }
 
             final JSONObject location = jsonObject.optJSONObject("location");
             if (location != null) {
                 final double latitude = location.optDouble("lat", 0);
                 final double longitude = location.optDouble("long", 0);
+                final String requestId = jsonObject.optString("id", "");
                 if (latitude != 0 && longitude != 0) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(MapsActivity.this, "Latitude: " + latitude + "\nLongitude: " + longitude, Toast.LENGTH_SHORT).show();
+                            if (!TextUtils.equals(mRequestId, requestId)) {
+                                mRequestId = requestId;
+                                mMarkerList.clear();
+                            }
+                            addMarker(new LatLng(latitude, longitude));
                         }
                     });
                 }
