@@ -207,7 +207,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void goToGameScoreScreen() {
-        Intent intent = new Intent(getApplicationContext(), GameScoreActivity.class); // TODO: make game screen
+        Intent intent = new Intent(getApplicationContext(), GameScoreActivity.class);
         startActivity(intent);
     }
 
@@ -279,6 +279,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         // Tag writing mode
+        // TODO: disable this for people who are human -- only allow one person to push.
         if (mWriteMode && NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
             Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             writeTag(getNoteAsNdef(), detectedTag);
