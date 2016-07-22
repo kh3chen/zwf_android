@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/endgame_bg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Humans Win!"
+        android:id="@+id/winner_text"
+        android:layout_alignParentBottom="false"
+        android:layout_centerHorizontal="true"
+        android:textSize="54dp"
+        android:layout_marginTop="32dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:id="@+id/scoreboard"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/winner_text"
+        android:layout_marginTop="16dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/zombie_score_container"
+            android:gravity="right"
+            android:layout_gravity="left"
+            android:layout_weight="1"
+            android:background="@color/colorDark">
+
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/zombie"
+                android:layout_gravity="right" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4"
+                android:id="@+id/zombieScore"
+                android:layout_gravity="center_vertical"
+                android:textSize="48sp"
+                android:layout_marginRight="32dp"
+                android:layout_marginLeft="16dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/human_score_container"
+            android:gravity="left"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:background="@color/colorAccentBlue">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="11"
+                android:id="@+id/humanScore"
+                android:layout_gravity="center_vertical"
+                android:textSize="48sp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="16dp" />
+
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView2"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/human"
+                android:layout_gravity="left" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Game"
+        android:id="@+id/play_again_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="36dp"
+        style="@style/z_button" />
+
+</RelativeLayout>

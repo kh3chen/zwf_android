@@ -10,5 +10,8 @@
     <color name="colorAccentRed">#b60000</color>
     <color name="colorAccentYellow">#fbda41</color>
     <color name="colorAccentYellowFaded50">#7ffbda41</color>
+    <color name="colorAccentBlue">#192a4b</color>
+    <color name="colorAccentGreenGrey">#415052</color>
+    <color name="colorDark">#090f08</color>
     <color name="red">#fa0101</color>
 </resources>

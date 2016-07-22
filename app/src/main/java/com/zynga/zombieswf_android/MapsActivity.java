@@ -227,7 +227,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void goToGameScoreScreen() {
-        Intent intent = new Intent(getApplicationContext(), GameScoreActivity.class);
+        Intent intent = new Intent(getApplicationContext(), EndGameActivity.class);
         startActivity(intent);
     }
 

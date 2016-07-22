@@ -38,19 +38,19 @@ public class JoinGameActivity extends Activity implements View.OnClickListener {
         //EditText gameCode = (EditText) findViewById(R.id.game_code);
         //gameCode.setLetterSpacing((float) 0.1);
 
-        ZombieApplication app = (ZombieApplication) getApplication();
-        mSocket = app.getSocket();
-        mSocket.on(SocketConstants.COLLECT, onGameEmit);
-        if (!mSocket.connected()) {
-            mSocket.connect();
-        }
+//        ZombieApplication app = (ZombieApplication) getApplication();
+//        mSocket = app.getSocket();
+//        mSocket.on(SocketConstants.COLLECT, onGameEmit);
+//        if (!mSocket.connected()) {
+//            mSocket.connect();
+//        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.confirm:
-                mSocket.emit(SocketConstants.EMIT, SocketEvent.makeJoinObject("1q2w3e"));
+                //mSocket.emit(SocketConstants.EMIT, SocketEvent.makeJoinObject("1q2w3e"));
                 break;
         }
     }
