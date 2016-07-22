@@ -105,16 +105,26 @@
             android:textSize="24sp"
             android:id="@+id/game_time_label" />
 
-        <TextView
+        <EditText
             android:id="@+id/remaining_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="60 MINS"
+            android:text="60"
             android:inputType="number"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:textColor="@color/colorPrimaryDarkest"
             android:textStyle="bold"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MINS"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="false"
+            android:layout_above="@+id/start_game_button"
+            android:textColor="@color/colorPrimaryDarkest"
             android:textSize="24sp" />
     </TableRow>
 

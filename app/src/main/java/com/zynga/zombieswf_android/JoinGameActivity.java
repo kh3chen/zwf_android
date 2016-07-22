@@ -8,9 +8,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-<<<<<<< HEAD
-import android.widget.EditText;
-=======
 import android.widget.Toast;
 
 import com.zynga.zombieswf_android.socketio.SocketConstants;
@@ -26,9 +23,8 @@ import io.socket.emitter.Emitter;
 /**
  * Created by byee on 7/21/16.
  */
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class JoinGameActivity extends Activity implements View.OnClickListener {
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private Socket mSocket;
 
     @Override

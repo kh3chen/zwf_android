@@ -174,9 +174,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 // TODO: send to player screen - P2
-                // test
-                Intent intent = new Intent(getApplicationContext(), StickyNotesActivity.class);
-                startActivity(intent);
             }
         });
 
