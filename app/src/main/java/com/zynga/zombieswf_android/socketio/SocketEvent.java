@@ -1,5 +1,7 @@
 package com.zynga.zombieswf_android.socketio;
 
+import android.location.Location;
+
 /**
  * Created by byee on 7/22/16.
  */
@@ -28,6 +30,20 @@ public class SocketEvent {
         stringBuilder.append("\",game_time:\"");
         stringBuilder.append(String.valueOf(gameTime));
         stringBuilder.append("\"}");
+        return stringBuilder.toString();
+    }
+
+    public static String makePing() {
+        return "{ping:\"now\"}";
+    }
+
+    public static String makeLocationObject(Location location) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("{location:{lat:");
+        stringBuilder.append(String.valueOf(location.getLatitude()));
+        stringBuilder.append(",long:");
+        stringBuilder.append(String.valueOf(location.getLongitude()));
+        stringBuilder.append("}}");
         return stringBuilder.toString();
     }
 }
