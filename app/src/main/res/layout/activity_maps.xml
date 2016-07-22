@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     >
@@ -12,7 +12,28 @@
     <TextView
         android:id="@+id/count_down_timer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"/>
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/ping_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PING"/>
+
+        <Button
+            android:id="@+id/players_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Players"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
 

@@ -1,6 +1,8 @@
 package com.zynga.zombieswf_android;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -8,6 +10,9 @@ import android.os.CountDownTimer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,6 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mCountDownTimer = (TextView) findViewById(R.id.count_down_timer);
 
+        // Timer stuff
         String minutesString;
 
         Bundle extras = getIntent().getExtras();
@@ -65,18 +71,73 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
                 mCountDownTimer.setText("Time Remaining: " + formattedString);
-                //here you can have your logic to set text to edittext
             }
 
             public void onFinish() {
                 mCountDownTimer.setText("Round Ended!");
-                // TODO: end game
+                AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this)
+                        .setTitle("Round Over!")
+                        .setMessage("Click NEXT to see who won!")
+                        .setPositiveButton("NEXT", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                goToGameScoreScreen();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                goToGameScoreScreen();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert);
+                AlertDialog dialog = builder.create();
+
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(true);
+                        ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_NEGATIVE).setVisibility(View.INVISIBLE);
+                    }
+                });
+
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        goToGameScoreScreen();
+                    }
+                });
+
+                dialog.show();
             }
 
         }.start();
 
+        // Buttons
+        Button pingButton = (Button) findViewById(R.id.ping_button);
+        Button playerButton = (Button) findViewById(R.id.players_button);
+
+        pingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: call server for all gps locations
+            }
+        });
+
+        playerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: send to player screen - P2
+            }
+        });
+
     }
 
+    private void goToGameScoreScreen() {
+        Intent intent = new Intent(getApplicationContext(), GameScoreActivity.class); // TODO: make game screen
+        startActivity(intent);
+    }
 
     /**
      * Manipulates the map once available.
@@ -122,5 +183,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_ACCESS_FINE_LOCATION);
                 }
         }
+    }
+
+    // Prevent exiting game on back press
+    @Override
+    public void onBackPressed() {
     }
 }
