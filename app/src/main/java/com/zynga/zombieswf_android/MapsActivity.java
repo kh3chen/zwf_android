@@ -110,6 +110,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
 
+                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        goToGameScoreScreen();
+                    }
+                });
+
                 dialog.show();
             }
 
