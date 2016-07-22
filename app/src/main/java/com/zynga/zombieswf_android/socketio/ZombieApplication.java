@@ -14,7 +14,7 @@ public class ZombieApplication extends Application {
     private Socket mSocket;
     {
         try {
-            mSocket = IO.socket("http://10.101.210.63:3800/");
+            mSocket = IO.socket("http://10.101.210.62:3800/");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

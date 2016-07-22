@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.zynga.zombieswf_android.socketio.SocketConstants;
+import com.zynga.zombieswf_android.socketio.SocketEvent;
 import com.zynga.zombieswf_android.socketio.ZombieApplication;
 
 import org.json.JSONException;
@@ -55,7 +56,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     }
 
     private void onCreateGameClicked() {
-        mSocket.emit(SocketConstants.EMIT, "{toast:\"Player has created a game!\"}");
+        mSocket.emit(SocketConstants.EMIT, SocketEvent.makeToastObject("SUCCESSFUL TOAST!"));
     }
 
     private Emitter.Listener onGameEmit = new Emitter.Listener() {
