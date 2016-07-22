@@ -15,13 +15,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -164,13 +168,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.setMyLocationEnabled(true);
 
-        LatLng me = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+        LatLng myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f));
 
         // Add a marker at location and move the camera
-        mMap.addMarker(new MarkerOptions().position(me).title("You"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-151, 25)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(me));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f));
+        ArrayList<Marker> markers = new ArrayList<>();
+        markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.latitude + (Math.random() - 0.5) * 0.01, myLocation.longitude + (Math.random() - 0.5) * 0.01))));
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(myLocation);
+        for (Marker marker : markers) {
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+
+        int padding = 200; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+
+        mMap.animateCamera(cu);
     }
 
     @Override
