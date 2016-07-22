@@ -2,40 +2,52 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/bg_imageView"
+        android:background="@drawable/main_bg"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:textSize="60dp"
-        android:text="TIME\nLIMIT"
-        android:textColor="@android:color/white"/>
+        android:layout_alignParentTop="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorAccentYellow"
         android:ellipsize="start"
-        android:hint="Enter a Game Code"
-        android:textColorHint="@color/colorAccentFaded50"
+        android:hint="• • • •"
+        android:maxLength="4"
+        android:textColorHint="@color/colorAccentYellowFaded50"
         android:singleLine="true"
-        android:maxLines="1"/>
+        android:maxLines="1"
+        android:id="@+id/game_code"
+        android:background="@null"
+        android:textSize="112sp"
+        android:layout_below="@+id/enter_game_code_label"
+        android:layout_marginTop="8dp" />
 
     <Button
         android:id="@+id/confirm"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
-        android:text="CONFIRM"
-        android:textSize="40dp"
-        android:textColor="@android:color/white"
-        android:background="@null"/>
+        android:text="@string/join"
+        style="@style/z_button" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ENTER GAME CODE"
+        android:id="@+id/enter_game_code_label"
+        android:layout_marginTop="56dp"
+        android:textSize="24sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

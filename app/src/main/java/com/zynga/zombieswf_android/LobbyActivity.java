@@ -7,8 +7,10 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +73,10 @@ public class LobbyActivity extends Activity {
 
         //numberOfUsers = (TextView) findViewById(R.id.number_of_users);
         //numberOfUsers.setText(playerIdList.size());
+
+        String[] playerList = { "athompson", "kliang", "azeng", "byee", "kchen", "coostenbrug", "knguyen", "mzhong", "dshi", "psung", "ecampbell" };
+        ListView playerListView = (ListView) findViewById(R.id.player_list);
+        playerListView.setAdapter(new ArrayAdapter<String>(this,R.layout.z_player_list,R.id.list_content, playerList));
 
         ZombieApplication app = (ZombieApplication) getApplication();
         mSocket = app.getSocket();

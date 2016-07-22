@@ -1,7 +1,9 @@
 package com.zynga.zombieswf_android;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -25,8 +27,8 @@ import io.socket.emitter.Emitter;
 /**
  * Created by byee on 7/21/16.
  */
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class JoinGameActivity extends Activity implements View.OnClickListener {
-
     private Socket mSocket;
 
     private String mAndroidId;
@@ -45,6 +47,8 @@ public class JoinGameActivity extends Activity implements View.OnClickListener {
 
         mAndroidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         playerIdList.add(mAndroidId);
+        //EditText gameCode = (EditText) findViewById(R.id.game_code);
+        //gameCode.setLetterSpacing((float) 0.1);
 
         ZombieApplication app = (ZombieApplication) getApplication();
         mSocket = app.getSocket();
