@@ -1,6 +1,8 @@
 package com.zynga.zombieswf_android.socketio;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import java.net.URISyntaxException;
 
@@ -12,7 +14,7 @@ public class ZombieApplication extends Application {
     private Socket mSocket;
     {
         try {
-            mSocket = IO.socket("http://universalplatform-dev-portal-03.usw2.zynga.com:3800/");
+            mSocket = IO.socket("http://10.101.210.63:3800/");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -20,5 +22,11 @@ public class ZombieApplication extends Application {
 
     public Socket getSocket() {
         return mSocket;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

@@ -3,15 +3,16 @@ package com.zynga.zombieswf_android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.zynga.zombieswf_android.socketio.SocketConstants;
 import com.zynga.zombieswf_android.socketio.ZombieApplication;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Random;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -36,8 +37,8 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
         ZombieApplication app = (ZombieApplication) getApplication();
         mSocket = app.getSocket();
+        mSocket.on(SocketConstants.COLLECT, onGameEmit);
         mSocket.connect();
-        mSocket.on("gameEmit", onGameEmit);
     }
 
     @Override
@@ -54,15 +55,34 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     }
 
     private void onCreateGameClicked() {
-        mSocket.emit("gameEmit", "Player " + new Random().nextInt(100) + " has created a game!");
+        mSocket.emit(SocketConstants.EMIT, "{toast:\"Player has created a game!\"}");
     }
 
     private Emitter.Listener onGameEmit = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            JSONObject data = (JSONObject) args[0];
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = new JSONObject(((String) args[0]));
+            } catch (JSONException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(HomeActivity.this, "Bad JSON string!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return;
+            }
 
-            Toast.makeText(HomeActivity.this, data.toString(), Toast.LENGTH_SHORT).show();
+            final String toast = jsonObject.optString("toast");
+            if (!TextUtils.isEmpty(toast)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(HomeActivity.this, toast, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
     };
 }
