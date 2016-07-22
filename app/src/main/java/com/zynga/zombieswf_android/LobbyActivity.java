@@ -34,6 +34,7 @@ public class LobbyActivity extends Activity {
     // Game will always be from the creator
     public static final String KEY_PLAYER_LIST = "keyPlayerList";
     public static final String KEY_GAME_TIME = "keyGameTime";
+    public static final String KEY_IS_CREATOR = "keyIsCreator";
 
     private Socket mSocket;
     private String mGameCode = "1q2w3e";
@@ -41,8 +42,11 @@ public class LobbyActivity extends Activity {
     private List<String> playerIdList = new ArrayList<>();
 
     private EditText mTimeEditText;
+    private Button mStartGameButton;
+    private boolean mIsCreator = false;
 
     private String mAndroidId;
+    private String mGameTime;
 
     TextView numberOfUsers;
 
@@ -56,8 +60,8 @@ public class LobbyActivity extends Activity {
 
         mTimeEditText = (EditText) findViewById(R.id.remaining_time);
 
-        Button startGameButton = (Button) findViewById(R.id.start_game_button);
-        startGameButton.setOnClickListener(new View.OnClickListener() {
+        mStartGameButton = (Button) findViewById(R.id.start_game_button);
+        mStartGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSocket.emit(SocketConstants.EMIT, SocketEvent.startGame());
@@ -84,6 +88,26 @@ public class LobbyActivity extends Activity {
         if (!mSocket.connected()) {
             mSocket.connect();
         }
+
+        // See if we are creator
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            mIsCreator = false;
+            mGameTime = "2";
+        } else {
+            mIsCreator = extras.getBoolean(LobbyActivity.KEY_IS_CREATOR);
+            mGameTime = extras.getString(LobbyActivity.KEY_GAME_TIME);
+        }
+        if (!mIsCreator) {
+            styleForNonCreator();
+        }
+    }
+
+    private void styleForNonCreator() {
+        mTimeEditText.setEnabled(false);
+        mTimeEditText.setText(String.valueOf(mGameTime));
+        mStartGameButton.setText("Waiting ...");
+        mStartGameButton.setEnabled(false);
     }
 
     private Emitter.Listener onGameEmit = new Emitter.Listener() {
@@ -124,6 +148,15 @@ public class LobbyActivity extends Activity {
                     isValidGameCode = false;
                 }
                 mSocket.emit(SocketConstants.EMIT, SocketEvent.makeJoinResultObject(isValidGameCode, mAndroidId, Integer.parseInt(mTimeEditText.getText().toString())));
+            }
+
+            // listen for game start
+            final String startGame = jsonObject.optString("start_game");
+            if (!TextUtils.isEmpty(startGame)) {
+                Intent intent = new Intent(LobbyActivity.this, MapsActivity.class);
+                intent.putExtra(LobbyActivity.KEY_PLAYER_LIST, TextUtils.join(",", playerIdList));
+                intent.putExtra(LobbyActivity.KEY_GAME_TIME, mGameTime);
+                startActivity(intent);
             }
         }
     };

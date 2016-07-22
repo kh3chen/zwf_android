@@ -46,7 +46,9 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.create_game:
                 onCreateGameClicked();
-                startActivity(new Intent(this, LobbyActivity.class));
+                Intent intent = new Intent(this, LobbyActivity.class);
+                intent.putExtra(LobbyActivity.KEY_IS_CREATOR, true);
+                startActivity(intent);
                 break;
             case R.id.join_game:
                 startActivity(new Intent(this, JoinGameActivity.class));

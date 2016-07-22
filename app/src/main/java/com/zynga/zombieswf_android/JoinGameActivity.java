@@ -88,12 +88,22 @@ public class JoinGameActivity extends Activity implements View.OnClickListener {
                 if (Boolean.parseBoolean(joinSuccessful)) {
                     mGameTime = jsonObject.optInt("game_time");
                     playerIdList.add(jsonObject.optString("id"));
+                    /*
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Toast.makeText(JoinGameActivity.this, "Successfully joined! Waiting for game to start...", Toast.LENGTH_SHORT).show();
                         }
                     });
+                    */
+                    // go to create game screen with things disabled
+                    Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
+                    intent.putExtra(LobbyActivity.KEY_IS_CREATOR, false);
+                    // Add map time
+                    // Intent intent = new Intent(JoinGameActivity.this, MapsActivity.class);
+                    intent.putExtra(LobbyActivity.KEY_GAME_TIME, String.valueOf(mGameTime));
+                    startActivity(intent);
+
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -103,14 +113,14 @@ public class JoinGameActivity extends Activity implements View.OnClickListener {
                     });
                 }
             }
-
-            final String startGame = jsonObject.optString("start_game");
-            if (!TextUtils.isEmpty(startGame)) {
-                Intent intent = new Intent(JoinGameActivity.this, MapsActivity.class);
-                intent.putExtra(LobbyActivity.KEY_PLAYER_LIST, TextUtils.join(",", playerIdList));
-                intent.putExtra(LobbyActivity.KEY_GAME_TIME, String.valueOf(mGameTime));
-                startActivity(intent);
-            }
+//
+//            final String startGame = jsonObject.optString("start_game");
+//            if (!TextUtils.isEmpty(startGame)) {
+//                Intent intent = new Intent(JoinGameActivity.this, MapsActivity.class);
+//                intent.putExtra(LobbyActivity.KEY_PLAYER_LIST, TextUtils.join(",", playerIdList));
+//                intent.putExtra(LobbyActivity.KEY_GAME_TIME, String.valueOf(mGameTime));
+//                startActivity(intent);
+//            }
         }
     };
 }
