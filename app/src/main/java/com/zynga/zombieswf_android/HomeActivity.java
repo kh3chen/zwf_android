@@ -56,7 +56,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
     }
 
     private void onCreateGameClicked() {
-        mSocket.emit(SocketConstants.EMIT, SocketEvent.makeToastObject("SUCCESSFUL TOAST!"));
+        // mSocket.emit(SocketConstants.EMIT, SocketEvent.makeToastObject("SUCCESSFUL TOAST!"));
     }
 
     private Emitter.Listener onGameEmit = new Emitter.Listener() {
