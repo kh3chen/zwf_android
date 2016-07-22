@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- State Normal -->
-    <item>
-        <shape>
-            <solid
-                android:color="@color/colorAccentBrown" />
-            <stroke
-                android:width="3dp"
-                android:color="@color/colorAccentBrown" />
-            <corners
-                android:radius="0dp" />
-            <padding
-                android:left="10dp"
-                android:top="10dp"
-                android:right="10dp"
-                android:bottom="10dp" />
-        </shape>
-    </item>
-
     <item android:state_pressed="true" >
         <shape>
             <solid
@@ -51,6 +33,35 @@
                 android:right="10dp"
                 android:bottom="10dp" />
         </shape>
+    </item>
+
+    <!-- State Normal -->
+    <item>
+        <layer-list>
+            <!-- Shadow Color -->
+            <item android:top="4dp" android:left="4dp">
+                <shape>
+                    <solid
+                        android:color="@color/colorAccentBrownDark" />
+                </shape>
+            </item>
+            <item android:bottom="4dp" android:right="4dp">
+                <shape>
+                    <solid
+                        android:color="@color/colorAccentBrown" />
+                    <stroke
+                        android:width="3dp"
+                        android:color="@color/colorAccentBrown" />
+                    <corners
+                        android:radius="0dp" />
+                    <padding
+                        android:left="10dp"
+                        android:top="10dp"
+                        android:right="10dp"
+                        android:bottom="10dp" />
+                </shape>
+            </item>
+        </layer-list>
     </item>
 
 </selector>

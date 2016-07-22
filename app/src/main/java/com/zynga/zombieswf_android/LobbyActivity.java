@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -21,10 +23,11 @@ public class LobbyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lobby_layout);
 
+
         LayoutInflater inflater = LayoutInflater.from(this);
         inflater.inflate(R.layout.lobby_layout, null);
 
-        final EditText timeEditText = (EditText) findViewById(R.id.remaining_time);
+        final TextView timeEditText = (TextView) findViewById(R.id.remaining_time);
 
         Button startGameButton = (Button) findViewById(R.id.start_game_button);
         startGameButton.setOnClickListener(new View.OnClickListener() {
@@ -38,6 +41,10 @@ public class LobbyActivity extends Activity {
 
         TextView numberOfUsers = (TextView) findViewById(R.id.number_of_users);
         // TODO: get and set number of users based on socket
+
+        String[] playerList = { "athompson", "kliang", "azeng", "byee", "kchen", "coostenbrug", "knguyen", "mzhong", "dshi", "psung", "ecampbell" };
+        ListView playerListView = (ListView) findViewById(R.id.player_list);
+        playerListView.setAdapter(new ArrayAdapter<String>(this,R.layout.z_player_list,R.id.list_content, playerList));
     }
 
 }

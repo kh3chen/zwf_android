@@ -23,4 +23,14 @@
         <item name="android:textColor">@color/colorAccentYellow</item>
     </style>
 
+    <!-- Table View -->
+    <style name="z_list" parent="@android:style/Widget.ListView">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:cacheColorHint">@android:color/transparent</item>
+        <item name="android:divider">@android:color/transparent</item>
+        <item name="android:dividerHeight">0dp</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:maxHeight">192dp</item>
+    </style>
+
 </resources>

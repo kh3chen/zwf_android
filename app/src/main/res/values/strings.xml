@@ -3,4 +3,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="lobby_activity">lobby</string>
     <string name="confirm">CONFIRM</string>
+    <string name="join">JOIN</string>
+    <string name="start_game">START GAME</string>
 </resources>

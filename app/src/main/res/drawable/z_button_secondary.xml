@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true" >
+        <shape>
+            <solid
+                android:color="@color/colorPrimary" />
+            <stroke
+                android:width="3dp"
+                android:color="@color/colorPrimary" />
+            <corners
+                android:radius="0dp" />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp" />
+        </shape>
+    </item>
 
     <item android:state_pressed="true" >
         <shape>
@@ -18,39 +34,34 @@
         </shape>
     </item>
 
-    <item android:state_focused="true" >
-        <shape>
-            <solid
-                android:color="@color/colorPrimary" />
-            <stroke
-                android:width="3dp"
-                android:color="@color/colorPrimary" />
-            <corners
-                android:radius="0dp" />
-            <padding
-                android:left="10dp"
-                android:top="10dp"
-                android:right="10dp"
-                android:bottom="10dp" />
-        </shape>
-    </item>
-
     <!-- State Normal -->
     <item>
-        <shape>
-            <solid
-                android:color="@color/colorPrimaryDark" />
-            <stroke
-                android:width="3dp"
-                android:color="@color/colorPrimaryDark" />
-            <corners
-                android:radius="0dp" />
-            <padding
-                android:left="10dp"
-                android:top="10dp"
-                android:right="10dp"
-                android:bottom="10dp" />
-        </shape>
+        <layer-list>
+            <!-- Shadow Color -->
+            <item android:top="4dp" android:left="4dp">
+                <shape>
+                    <solid
+                        android:color="@color/colorPrimaryDarkest" />
+                </shape>
+            </item>
+            <item android:bottom="4dp" android:right="4dp">
+                <shape>
+                    <solid
+                        android:color="@color/colorPrimaryDark" />
+                    <stroke
+                        android:width="3dp"
+                        android:color="@color/colorPrimaryDark" />
+                    <corners
+                        android:radius="0dp" />
+                    <padding
+                        android:left="10dp"
+                        android:top="10dp"
+                        android:right="10dp"
+                        android:bottom="10dp" />
+                </shape>
+            </item>
+        </layer-list>
     </item>
+
 
 </selector>

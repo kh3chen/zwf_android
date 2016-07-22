@@ -2,9 +2,12 @@
 <resources>
     <color name="colorPrimary">#aaaaaa</color>
     <color name="colorPrimaryDark">#747474</color>
+    <color name="colorPrimaryDarkest">#454343</color>
     <color name="colorAccent">#acd373</color>
     <color name="colorAccentFaded50">#7facd373</color>
     <color name="colorAccentBrown">#a67c52</color>
+    <color name="colorAccentBrownDark">#614930</color>
     <color name="colorAccentRed">#b60000</color>
     <color name="colorAccentYellow">#fbda41</color>
+    <color name="colorAccentYellowFaded50">#7ffbda41</color>
 </resources>
