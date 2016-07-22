@@ -9,6 +9,9 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.NFC" />
+
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -53,6 +56,10 @@
         <activity
             android:name=".GameScoreActivity"
             android:label="@string/game_score_activity">
+        </activity>
+        <activity
+            android:name=".StickyNotesActivity"
+            android:label="sticky_notes_activity">
         </activity>
     </application>
 </manifest>
