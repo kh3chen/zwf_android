@@ -21,11 +21,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,11 +38,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.zynga.zombieswf_android.socketio.SocketConstants;
+import com.zynga.zombieswf_android.socketio.SocketEvent;
+import com.zynga.zombieswf_android.socketio.ZombieApplication;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -56,6 +64,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView mCountDownTimer;
     private Button mPingButton;
 
+    private Socket mSocket;
     private static final String TAG = "stickynotes";
     private boolean mResumed = false;
     private boolean mWriteMode = false;
@@ -81,7 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String minutesString;
 
         Bundle extras = getIntent().getExtras();
-        if(extras == null) {
+        if (extras == null) {
             minutesString = null;
         } else {
             minutesString = extras.getString(LobbyActivity.KEY_GAME_TIME);
@@ -119,8 +128,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     @Override
                     public void onShow(DialogInterface dialog) {
-                        ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(true);
-                        ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_NEGATIVE).setVisibility(View.INVISIBLE);
+                        ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(true);
+                        ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE).setVisibility(View.INVISIBLE);
                     }
                 });
 
@@ -150,7 +159,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mPingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: call server for all gps locations
+                mSocket.emit(SocketConstants.EMIT, SocketEvent.makePing());
 
                 // set timer cooldown to 2 minutes
                 mPingButton.setEnabled(false);
@@ -179,6 +188,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intent);
             }
         });
+
+        ZombieApplication app = (ZombieApplication) getApplication();
+        mSocket = app.getSocket();
+        mSocket.on(SocketConstants.COLLECT, onGameEmit);
+        if (!mSocket.connected()) {
+            mSocket.connect();
+        }
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         // Handle all of our received NFC intents in this activity.
@@ -480,4 +496,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onBackPressed() {
     }
+
+    private Emitter.Listener onGameEmit = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = new JSONObject(((String) args[0]));
+            } catch (JSONException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MapsActivity.this, "Bad JSON string!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return;
+            }
+
+            final String ping = jsonObject.optString("ping");
+            if (!TextUtils.isEmpty(ping)) {
+                if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MapsActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_ACCESS_FINE_LOCATION);
+                    return;
+                }
+                mSocket.emit(SocketConstants.EMIT, SocketEvent.makeLocationObject(mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)));
+            }
+
+            final JSONObject location = jsonObject.optJSONObject("location");
+            if (location != null) {
+                final double latitude = location.optDouble("lat", 0);
+                final double longitude = location.optDouble("long", 0);
+                if (latitude != 0 && longitude != 0) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MapsActivity.this, "Latitude: " + latitude + "\nLongitude: " + longitude, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        }
+    };
 }

@@ -3,6 +3,7 @@ package com.zynga.zombieswf_android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,9 @@ import com.zynga.zombieswf_android.socketio.ZombieApplication;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
@@ -30,6 +34,8 @@ public class LobbyActivity extends Activity {
 
     private Socket mSocket;
     private String mGameCode = "1q2w3e";
+
+    private List<String> playerIdList = new ArrayList<>();
 
     private EditText mTimeEditText;
 
@@ -55,6 +61,9 @@ public class LobbyActivity extends Activity {
 
         TextView numberOfUsers = (TextView) findViewById(R.id.number_of_users);
         // TODO: get and set number of users based on socket
+
+        String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        playerIdList.add(androidId);
 
         ZombieApplication app = (ZombieApplication) getApplication();
         mSocket = app.getSocket();
