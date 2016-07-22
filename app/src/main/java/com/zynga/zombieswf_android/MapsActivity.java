@@ -554,7 +554,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     ActivityCompat.requestPermissions(MapsActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_ACCESS_FINE_LOCATION);
                     return;
                 }
-                mSocket.emit(SocketConstants.EMIT, SocketEvent.makeLocationObject(mLocation, UUID.randomUUID().toString()));
+                if (!mIsZombie) {
+                    mSocket.emit(SocketConstants.EMIT, SocketEvent.makeLocationObject(mLocation, UUID.randomUUID().toString()));
+                }
             }
 
             final JSONObject location = jsonObject.optJSONObject("location");
