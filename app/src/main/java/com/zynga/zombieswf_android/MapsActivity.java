@@ -66,7 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView mCountDownTimer;
     private Button mPingButton;
 
-    private String mRequestId;
+    private String mRequestId = UUID.randomUUID().toString();
     private List<Marker> mMarkerList;
     private boolean mIsZombie;
 
@@ -242,11 +242,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+        mMarkerList.clear();
         mMap.clear();
 
         mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        mSocket.emit(SocketConstants.EMIT, SocketEvent.makePing());
+        mSocket.emit(SocketConstants.EMIT, SocketEvent.makePing(mRequestId));
     }
 
     private void addMarker(LatLng latLng) {
@@ -554,9 +555,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     ActivityCompat.requestPermissions(MapsActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_ACCESS_FINE_LOCATION);
                     return;
                 }
-                if (!mIsZombie) {
-                    mSocket.emit(SocketConstants.EMIT, SocketEvent.makeLocationObject(mLocation, UUID.randomUUID().toString()));
-                }
+                mSocket.emit(SocketConstants.EMIT, SocketEvent.makeLocationObject(mLocation, ping, mIsZombie));
             }
 
             final JSONObject location = jsonObject.optJSONObject("location");
@@ -564,15 +563,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 final double latitude = location.optDouble("lat", 0);
                 final double longitude = location.optDouble("long", 0);
                 final String requestId = jsonObject.optString("id", "");
+                final boolean isZombie = jsonObject.optBoolean("zombie", true);
                 if (latitude != 0 && longitude != 0) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (!TextUtils.equals(mRequestId, requestId)) {
-                                mRequestId = requestId;
-                                mMarkerList.clear();
+                            if (!TextUtils.equals(mRequestId, requestId) && !isZombie) {
+                                addMarker(new LatLng(latitude, longitude));
                             }
-                            addMarker(new LatLng(latitude, longitude));
                         }
                     });
                 }

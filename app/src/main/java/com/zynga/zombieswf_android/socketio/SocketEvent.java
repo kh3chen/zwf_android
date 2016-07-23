@@ -39,11 +39,15 @@ public class SocketEvent {
         return stringBuilder.toString();
     }
 
-    public static String makePing() {
-        return "{ping:\"now\"}";
+    public static String makePing(String requestId) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("{ping:");
+        stringBuilder.append(requestId);
+        stringBuilder.append("}");
+        return stringBuilder.toString();
     }
 
-    public static String makeLocationObject(Location location, String requestId) {
+    public static String makeLocationObject(Location location, String requestId, boolean isZombie) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{location:{lat:");
         stringBuilder.append(String.valueOf(location.getLatitude()));
@@ -52,6 +56,8 @@ public class SocketEvent {
         stringBuilder.append("}");
         stringBuilder.append(",id:");
         stringBuilder.append(requestId);
+        stringBuilder.append(",zombie:");
+        stringBuilder.append(String.valueOf(isZombie));
         stringBuilder.append("}");
         return stringBuilder.toString();
     }
