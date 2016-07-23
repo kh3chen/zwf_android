@@ -550,7 +550,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
             final String ping = jsonObject.optString("ping");
-            if (!TextUtils.isEmpty(ping)) {
+            if (!TextUtils.isEmpty(ping) && !TextUtils.equals(mRequestId, ping)) {
                 if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(MapsActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_ACCESS_FINE_LOCATION);
                     return;
