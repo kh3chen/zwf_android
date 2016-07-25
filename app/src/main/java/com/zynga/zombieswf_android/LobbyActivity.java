@@ -156,6 +156,9 @@ public class LobbyActivity extends Activity {
                     isValidGameCode = false;
                 }
                 boolean isZombie = mNumZombies == 0 || mNumZombies < playerIdList.size() * 0.2;
+                if (isZombie) {
+                    mNumZombies++;
+                }
                 mSocket.emit(SocketConstants.EMIT, SocketEvent.makeJoinResultObject(isValidGameCode, mAndroidId, Integer.parseInt(mTimeEditText.getText().toString()), isZombie));
             }
 
