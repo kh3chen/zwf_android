@@ -38,7 +38,7 @@
 
         <activity
             android:name=".HomeActivity"
-            android:label="Home"
+            android:label="Zombies"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="stateAlwaysHidden">
 
