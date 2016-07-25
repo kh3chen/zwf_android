@@ -30,6 +30,9 @@ import io.socket.emitter.Emitter;
  */
 public class EndGameActivity extends Activity {
 
+    public final String KEY_HUMAN_SCORE = "keyHumanScore";
+    public final String KEY_ZOMBIE_SCORE = "keyZombieScore";
+
     // Set The Winning Team
     boolean humansWin = false;
     int humanScore_value = 4;
