@@ -568,7 +568,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (!TextUtils.equals(mRequestId, requestId) && !isZombie) {
+                            if (TextUtils.equals(mRequestId, requestId) && !isZombie) {
                                 addMarker(new LatLng(latitude, longitude));
                             }
                         }
