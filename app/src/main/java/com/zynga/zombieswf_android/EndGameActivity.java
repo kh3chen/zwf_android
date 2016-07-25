@@ -30,8 +30,8 @@ import io.socket.emitter.Emitter;
  */
 public class EndGameActivity extends Activity {
 
-    public final String KEY_HUMAN_SCORE = "keyHumanScore";
-    public final String KEY_ZOMBIE_SCORE = "keyZombieScore";
+    public final static String KEY_HUMAN_SCORE = "keyHumanScore";
+    public final static String KEY_ZOMBIE_SCORE = "keyZombieScore";
 
     // Set The Winning Team
     boolean humansWin = false;
@@ -48,6 +48,22 @@ public class EndGameActivity extends Activity {
         LinearLayout zombiesContainer =(LinearLayout) findViewById(R.id.zombie_score_container);
         TextView zombieScore = (TextView) findViewById(R.id.zombieScore);
         TextView humanScore = (TextView) findViewById(R.id.humanScore);
+
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+            humanScore_value = extras.getInt(KEY_HUMAN_SCORE);
+            zombieScore_value = extras.getInt(KEY_ZOMBIE_SCORE);
+        } else {
+            humanScore_value = 4;
+            zombieScore_value = 11;
+        }
+
+        if (humanScore_value > zombieScore_value) {
+            humansWin = true;
+        } else {
+            humansWin = false;
+        }
 
         if (humansWin) {
             winnerText.setText("Humans Win!");

@@ -47,7 +47,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -56,7 +58,6 @@ import io.socket.emitter.Emitter;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    // default to 2 minutes
     private final int PING_COOLDOWN_TIME_MILLIS = 0;//2 * 1000 * 60;
     final int MY_ACCESS_FINE_LOCATION = 1;
 
@@ -76,13 +77,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean mWriteMode = false;
     NfcAdapter mNfcAdapter;
 
-    PendingIntent mNfcPendingIntent;
-    IntentFilter[] mWriteTagFilters;
-    IntentFilter[] mNdefExchangeFilters;
+    private PendingIntent mNfcPendingIntent;
+    private IntentFilter[] mWriteTagFilters;
+    private IntentFilter[] mNdefExchangeFilters;
+
+    private Map<String, Boolean> mPlayers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPlayers = new HashMap<String, Boolean>();
+        mPlayers.put(mRequestId, mIsZombie);
+
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -194,7 +200,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         playerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: send to player screen - P2
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this)
+                        .setTitle("Are you sure?")
+                        .setMessage("Click OK to exit game")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                goToGameScoreScreen();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert);
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
@@ -235,6 +258,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void goToGameScoreScreen() {
         Intent intent = new Intent(getApplicationContext(), EndGameActivity.class);
+        // CALCULATE SCORES
+        int zombiesScore = 0;
+        int humansScore = 0;
+        for (String key : mPlayers.keySet()) {
+            if (mPlayers.get(key) == true) {
+                // is zombie
+                zombiesScore++;
+            } else {
+                humansScore++;
+            }
+        }
+        intent.putExtra(EndGameActivity.KEY_HUMAN_SCORE, humansScore);
+        intent.putExtra(EndGameActivity.KEY_ZOMBIE_SCORE, zombiesScore);
         startActivity(intent);
     }
 
@@ -574,7 +610,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     });
                 }
+                // Add to player list
+                mPlayers.put(requestId, isZombie);
+                checkIfGameOver();
             }
         }
     };
+
+    private void checkIfGameOver() {
+        for (String key : mPlayers.keySet()) {
+            if (mPlayers.get(key) == false) {
+                // If human
+                return;
+            }
+        }
+        // We have all players as zombies, end game
+        goToGameScoreScreen();
+    }
 }
