@@ -52,12 +52,12 @@ public class JoinGameActivity extends Activity implements View.OnClickListener {
         //EditText gameCode = (EditText) findViewById(R.id.game_code);
         //gameCode.setLetterSpacing((float) 0.1);
 
-        ZombieApplication app = (ZombieApplication) getApplication();
-        mSocket = app.getSocket();
-        mSocket.on(SocketConstants.COLLECT, onGameEmit);
-        if (!mSocket.connected()) {
-            mSocket.connect();
-        }
+//        ZombieApplication app = (ZombieApplication) getApplication();
+//        mSocket = app.getSocket();
+//        mSocket.on(SocketConstants.COLLECT, onGameEmit);
+//        if (!mSocket.connected()) {
+//            mSocket.connect();
+//        }
     }
 
     @Override
